@@ -1,8 +1,10 @@
 LOCAL_SRC=/usr/local/src
 
 DIR=/data/consul
-DATA_DIR=$DIR/data
-CONFIG_DIR=$DIR/consul.d
+DATA_DIR=${DIR}/data
+PID_FILE=${DIR}/consul.pid
+CONFIG_DIR=${DIR}/consul.d
+DATA_LOG=${DIR}/logs
 SERVICE_FILE=/etc/systemd/system/consul.service
 
 CONSUL_VERSION=1.18.2
@@ -22,6 +24,11 @@ sudo mv consul /usr/bin/
 complete -C /usr/bin/consul consul
 sudo mkdir  -p ${DATA_DIR}
 sudo mkdir  -p ${CONFIG_DIR}
+sudo mkdir  -p ${DATA_LOG}
+
+sudo touch ${CONFIG_DIR}/consul.hcl
+sudo touch ${CONFIG_DIR}/server.hcl
+sudo chmod 640 ${CONFIG_DIR}/consul.hcl
 sudo touch ${SERVICE_FILE}
 cat > ${SERVICE_FILE} << END_TEXT
 [Unit]
@@ -46,17 +53,22 @@ END_TEXT
 
 sudo useradd --system --home ${DIR} --shell /bin/false consul
 
-sudo touch ${CONFIG_DIR}/consul.hcl
-sudo chmod 640 ${CONFIG_DIR}/consul.hcl
 
 echo 'Enter the your Server Group IPs: 
 Example: ["10.1.1.1","10.1.1.2","10.1.1.3"]'  
 read SGIPs
 echo "Your Server Group IPs is ${SGIPs}" 
 
+if [ ! -n "${SGIPs}" ] ; then 
+  echo "Not input Server Group IPs, Exit"
+fi
+
+
 cat > ${CONFIG_DIR}/consul.hcl << END_TEXT
 datacenter = "${DATACENTER}"
 data_dir = "${DATA_DIR}"
+log_file = "${DATA_LOG}/consul.log"
+pid_file = "${PID_FILE}"
 encrypt = "aYzpAxIx8SX4YFNfsyr+t501M8G9TLRbGYeQhYsXUJ4="
 
 retry_join = ${SGIPs}
@@ -67,7 +79,7 @@ END_TEXT
 
 cat > ${CONFIG_DIR}/server.hcl << END_TEXT
 server = true
-bootstrap_expect = 3
+bootstrap_expect = 1
 ui = true
 END_TEXT
 

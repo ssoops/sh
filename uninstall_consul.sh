@@ -12,6 +12,10 @@ DATACENTER=YWKF
 
 sudo systemctl stop consul
 sudo systemctl disable consul
+rm -rf /tmp/consul_${CONSUL_VERSION}_linux_amd64.zip.bak
+rm -rf /tmp/consul_bin.bak
+rm -rf /tmp/consul_service_file.bak
+rm -rf /tmp/consul.bak
 sudo mv ${LOCAL_SRC}/consul_${CONSUL_VERSION}_linux_amd64.zip /tmp/consul_${CONSUL_VERSION}_linux_amd64.zip.bak
 sudo mv /usr/bin/consul /tmp/consul_bin.bak
 sudo mv ${SERVICE_FILE} /tmp/consul_service_file.bak
