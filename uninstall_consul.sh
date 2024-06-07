@@ -1,6 +1,6 @@
-LOCAL_SRC=/usr/local/src/
+LOCAL_SRC=/usr/local/src
 
-DIR=/data/consul/
+DIR=/data/consul
 SERVICE_FILE=/etc/systemd/system/consul.service
 
 CONSUL_VERSION=1.18.2

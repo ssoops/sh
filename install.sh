@@ -4,7 +4,9 @@ actions=("部署Consul" "..." "..." "Quit")
 select fav in "${actions[@]}"; do
     case $fav in
         "部署Consul")
-            echo "Americans eat roughly 100 acres of $fav each day!"
+            echo "部署Consul $fav"
+            /usr/bin/curl 'https://raw.githubusercontent.com/ssoops/sh/main/install_consul.sh' | bash
+	    exit
             ;;
         "Pho")
             echo "$fav is a Vietnamese soup that is commonly mispronounced like go, instead of duh."

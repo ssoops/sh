@@ -1,8 +1,8 @@
-LOCAL_SRC=/usr/local/src/
+LOCAL_SRC=/usr/local/src
 
-DIR=/data/consul/
-DATA_DIR=$DIR/data/
-CONFIG_DIR=$DIR/consul.d/
+DIR=/data/consul
+DATA_DIR=$DIR/data
+CONFIG_DIR=$DIR/consul.d
 SERVICE_FILE=/etc/systemd/system/consul.service
 
 CONSUL_VERSION=1.18.2
@@ -12,12 +12,13 @@ SERVER_GROUP=consul
 
 DATACENTER=YWKF
 
+cd ${LOCAL_SRC}
 wget https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
-unzip consul_${CONSUL_VERSION}_linux_amd64.zip 
+unzip -o consul_${CONSUL_VERSION}_linux_amd64.zip 
 sudo chown root:root consul
 sudo mv consul /usr/bin/
-consul --version
-consul -autocomplete-install
+/usr/bin/consul --version
+/usr/bin/consul -autocomplete-install
 complete -C /usr/bin/consul consul
 sudo mkdir  -p ${DATA_DIR}
 sudo mkdir  -p ${CONFIG_DIR}
